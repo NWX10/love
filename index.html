@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I Love You, My Noni</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Noto+Kufi+Arabic:wght@700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #050008;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Arial Black', 'Impact', sans-serif;
+    }
+
+    .bg-pulse {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(100, 0, 60, 0.15) 0%, transparent 60%);
+      animation: bgBreath 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes bgBreath {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .scene {
+      position: relative;
+      width: 460px;
+      height: 480px;
+      perspective: 900px;
+    }
+
+    .heart-wrapper {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotateY(0deg); }
+      to   { transform: rotateY(360deg); }
+    }
+
+    .heart-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 440px;
+      height: 440px;
+      transform: translate(-50%, -50%);
+      transform-style: preserve-3d;
+      animation: heartbeat 2.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%   { scale: 1; }
+      15%  { scale: 1.02; }
+      30%  { scale: 1; }
+      45%  { scale: 1.01; }
+      60%  { scale: 1; }
+      100% { scale: 1; }
+    }
+
+    .heart-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      clip-path: path('M 220 35 C 220 35 175 0 125 0 C 55 0 0 55 0 125 C 0 210 65 280 220 415 C 375 280 440 210 440 125 C 440 55 385 0 315 0 C 265 0 220 35 220 35 Z');
+      overflow: hidden;
+    }
+
+    .heart-layer .text-scroll {
+      display: flex;
+      flex-direction: column;
+      animation: scrollUp 12s linear infinite;
+    }
+
+    @keyframes scrollUp {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+
+    .heart-layer .line {
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: 2.5px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .l1 { transform: translateZ(8px); }
+    .l2 { transform: translateZ(4px); opacity: 0.6; }
+    .l3 { transform: translateZ(0px); opacity: 0.35; }
+    .l4 { transform: translateZ(-4px); opacity: 0.2; }
+    .l5 { transform: translateZ(-8px); opacity: 0.1; }
+
+    .l1 .line {
+      color: transparent;
+      background: linear-gradient(180deg, #ff8ab5 0%, #ff4081 20%, #e91e90 40%, #d81b8c 55%, #c2185b 70%, #9c27b0 85%, #7b1fa2 100%);
+      -webkit-background-clip: text; background-clip: text;
+    }
+    .l2 .line {
+      color: transparent;
+      background: linear-gradient(180deg, #ff4081 0%, #ab47bc 100%);
+      -webkit-background-clip: text; background-clip: text;
+    }
+    .l3 .line, .l4 .line, .l5 .line {
+      color: transparent;
+      background: linear-gradient(180deg, #e91e63 0%, #7b1fa2 100%);
+      -webkit-background-clip: text; background-clip: text;
+    }
+
+    .glow-heart {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 350px; height: 380px;
+      transform: translate(-50%, -48%);
+      background: radial-gradient(ellipse, rgba(255, 40, 100, 0.25) 0%, rgba(156, 39, 176, 0.1) 40%, transparent 70%);
+      filter: blur(30px);
+      pointer-events: none;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 60%, 100% { opacity: 0.5; scale: 1; }
+      15% { opacity: 0.8; scale: 1.04; }
+      45% { opacity: 0.65; scale: 1.02; }
+    }
+
+    .particles {
+      position: fixed; inset: 0;
+      pointer-events: none; overflow: hidden;
+      z-index: 2;
+    }
+
+    .particle {
+      position: absolute;
+      font-weight: 900;
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) rotate(0deg) scale(0.6); opacity: 0; }
+      8%   { opacity: 0.5; }
+      50%  { transform: translateY(0vh) rotate(180deg) scale(1); opacity: 0.35; }
+      92%  { opacity: 0.5; }
+      100% { transform: translateY(-100vh) rotate(360deg) scale(0.6); opacity: 0; }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: twinkle ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0); box-shadow: none; }
+      50% { opacity: 1; transform: scale(1); box-shadow: 0 0 6px 2px currentColor; }
+    }
+
+    .trail {
+      position: absolute;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: #ff4081;
+      pointer-events: none;
+      opacity: 0;
+      animation: trailAnim linear infinite;
+    }
+    @keyframes trailAnim {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0); }
+      10%  { opacity: 0.8; transform: scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+    }
+
+    .noni-popup {
+      position: fixed;
+      font-family: 'Dancing Script', cursive;
+      font-weight: 700;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+      animation: noniAppear 3.5s ease-in-out forwards;
+    }
+    .noni-popup span {
+      display: inline-block;
+      animation: noniWave 0.6s ease-in-out forwards;
+      color: #ff4081;
+      text-shadow: 0 0 15px rgba(255, 64, 129, 0.9), 0 0 30px rgba(255, 64, 129, 0.5), 0 0 60px rgba(156, 39, 176, 0.3);
+    }
+
+    @keyframes noniAppear {
+      0%   { opacity: 0; filter: blur(10px); transform: translateY(10px) scale(0.8); }
+      15%  { opacity: 1; filter: blur(0); transform: translateY(0) scale(1.05); }
+      30%  { transform: translateY(0) scale(1); }
+      75%  { opacity: 1; transform: translateY(-15px) scale(1); }
+      100% { opacity: 0; transform: translateY(-35px) scale(0.9); filter: blur(6px); }
+    }
+    @keyframes noniWave {
+      0%   { transform: translateY(8px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .love-burst {
+      position: absolute;
+      font-size: 18px;
+      pointer-events: none;
+      animation: burst 1.5s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes burst {
+      0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--bx), var(--by)) scale(0.3); }
+    }
+
+    .main-content {
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      pointer-events: none;
+    }
+    .main-content.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .start-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      cursor: pointer;
+      transition: opacity 1.2s ease;
+    }
+    .start-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .start-overlay .prompt-heart {
+      font-size: 60px;
+      animation: promptPulse 1.2s ease-in-out infinite;
+      margin-bottom: 24px;
+    }
+    .start-overlay .prompt-text {
+      font-family: 'Noto Kufi Arabic', 'Dancing Script', cursive, sans-serif;
+      font-size: 30px;
+      color: #ff4081;
+      direction: rtl;
+      text-shadow: 0 0 20px rgba(255, 64, 129, 0.7), 0 0 40px rgba(255, 64, 129, 0.3);
+      animation: promptFade 2s ease-in-out infinite;
+      letter-spacing: 1px;
+    }
+    @keyframes promptPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    @keyframes promptFade {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .music-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 50;
+      background: rgba(255, 64, 129, 0.15);
+      border: 1px solid rgba(255, 64, 129, 0.3);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    .music-toggle:hover {
+      background: rgba(255, 64, 129, 0.3);
+      transform: scale(1.1);
+    }
+    .music-toggle.muted {
+      opacity: 0.4;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="start-overlay" id="startOverlay">
+    <div class="prompt-heart">&#10084;</div>
+    <div class="prompt-text">اضغطي هنا ياقلبي</div>
+  </div>
+
+  <div class="main-content" id="mainContent">
+    <div class="music-toggle" id="musicToggle" title="Toggle music" style="display:none;">&#9835;</div>
+
+    <div class="bg-pulse"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="scene">
+      <div class="glow-heart"></div>
+      <div class="heart-wrapper">
+        <div class="heart-container">
+          <div class="heart-layer l1" id="hl1"></div>
+          <div class="heart-layer l2" id="hl2"></div>
+          <div class="heart-layer l3" id="hl3"></div>
+          <div class="heart-layer l4" id="hl4"></div>
+          <div class="heart-layer l5" id="hl5"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const TEXT = "I LOVE YOU  ";
+    const LINES = 30;
+
+    function fillHeart(el, scrollDuration) {
+      const scroll = document.createElement("div");
+      scroll.className = "text-scroll";
+      scroll.style.animationDuration = scrollDuration + "s";
+
+      for (let pass = 0; pass < 2; pass++) {
+        for (let i = 0; i < LINES; i++) {
+          const line = document.createElement("div");
+          line.className = "line";
+          const repeat = Math.ceil(70 / TEXT.length);
+          line.textContent = TEXT.repeat(repeat);
+          scroll.appendChild(line);
+        }
+      }
+      el.appendChild(scroll);
+    }
+
+    fillHeart(document.getElementById("hl1"), 10);
+    fillHeart(document.getElementById("hl2"), 13);
+    fillHeart(document.getElementById("hl3"), 16);
+    fillHeart(document.getElementById("hl4"), 19);
+    fillHeart(document.getElementById("hl5"), 22);
+
+    const pc = document.getElementById("particles");
+    const ptexts = ["I LOVE YOU", "\u2764", "I LOVE YOU", "\u2764", "MY NONI", "\u2764"];
+    for (let i = 0; i < 24; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      p.textContent = ptexts[i % ptexts.length];
+      p.style.left = Math.random() * 100 + "%";
+      p.style.animationDuration = (12 + Math.random() * 14) + "s";
+      p.style.animationDelay = (Math.random() * 14) + "s";
+      if (p.textContent === "\u2764") {
+        p.style.color = "rgba(255, 64, 129, 0.35)";
+        p.style.fontSize = (16 + Math.random() * 14) + "px";
+      } else {
+        p.style.color = "rgba(255, 64, 129, 0.2)";
+        p.style.fontSize = (8 + Math.random() * 7) + "px";
+      }
+      pc.appendChild(p);
+    }
+
+    const sparkColors = ["#ff4081", "#ff80ab", "#ea80fc", "#e040fb", "#ffffff", "#f48fb1"];
+    for (let i = 0; i < 35; i++) {
+      const s = document.createElement("div");
+      s.className = "sparkle";
+      s.style.left = (5 + Math.random() * 90) + "%";
+      s.style.top = (5 + Math.random() * 90) + "%";
+      s.style.animationDelay = (Math.random() * 6) + "s";
+      s.style.animationDuration = (1.5 + Math.random() * 3) + "s";
+      const size = 2 + Math.random() * 4;
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+      s.style.background = s.style.color;
+      pc.appendChild(s);
+    }
+
+    const noniPhrases = [
+      "My Noni \u2764",
+      "My Noni",
+      "\u2764 My Noni \u2764",
+      "I Love You, My Noni",
+      "My Noni forever \u2764",
+      "You're my everything, Noni",
+    ];
+
+    function spawnNoni() {
+      const el = document.createElement("div");
+      el.className = "noni-popup";
+      const phrase = noniPhrases[Math.floor(Math.random() * noniPhrases.length)];
+
+      phrase.split("").forEach((ch, i) => {
+        const span = document.createElement("span");
+        span.textContent = ch === " " ? "\u00a0" : ch;
+        span.style.animationDelay = (i * 0.04) + "s";
+        el.appendChild(span);
+      });
+
+      const positions = [
+        { top: (10 + Math.random() * 20) + "%", left: (5 + Math.random() * 25) + "%" },
+        { top: (10 + Math.random() * 20) + "%", right: (5 + Math.random() * 25) + "%" },
+        { bottom: (8 + Math.random() * 20) + "%", left: (8 + Math.random() * 25) + "%" },
+        { bottom: (8 + Math.random() * 20) + "%", right: (8 + Math.random() * 25) + "%" },
+      ];
+      const pos = positions[Math.floor(Math.random() * positions.length)];
+      Object.assign(el.style, pos);
+      el.style.fontSize = (26 + Math.random() * 12) + "px";
+
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 3800);
+    }
+
+    function scheduleNoni() {
+      setTimeout(() => { spawnNoni(); scheduleNoni(); }, 2500 + Math.random() * 3500);
+    }
+    setTimeout(scheduleNoni, 1200);
+
+    function spawnBurst() {
+      const hearts = ["\u2764", "\u2665", "\u2763", "\u2766"];
+      for (let i = 0; i < 6; i++) {
+        const el = document.createElement("div");
+        el.className = "love-burst";
+        el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        el.style.left = (35 + Math.random() * 30) + "%";
+        el.style.top = (30 + Math.random() * 30) + "%";
+        el.style.color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 60 + Math.random() * 100;
+        el.style.setProperty("--bx", Math.cos(angle) * dist + "px");
+        el.style.setProperty("--by", Math.sin(angle) * dist + "px");
+        el.style.animationDelay = (i * 0.07) + "s";
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1800);
+      }
+    }
+    setInterval(spawnBurst, 3000);
+
+    const bgMusic = document.getElementById("bgMusic");
+    const overlay = document.getElementById("startOverlay");
+    const mainContent = document.getElementById("mainContent");
+    const toggleBtn = document.getElementById("musicToggle");
+    bgMusic.volume = 0.15;
+
+    overlay.addEventListener("click", () => {
+      bgMusic.play();
+      overlay.classList.add("hidden");
+      mainContent.classList.add("visible");
+      toggleBtn.style.display = "flex";
+      setTimeout(() => overlay.remove(), 1300);
+    });
+
+    let muted = false;
+    toggleBtn.addEventListener("click", () => {
+      muted = !muted;
+      bgMusic.muted = muted;
+      toggleBtn.classList.toggle("muted", muted);
+      toggleBtn.textContent = muted ? "\u266C" : "\u266B";
+    });
+  </script>
+</body>
+</html>
